@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinil Virtual</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f5f0; /* Cor bege exata do fundo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #111;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #777;
+        }
+
+        /* Container dos Botões */
+        .controls {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: none;
+            background: #ffffff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 6px 6px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ícones dos botões */
+        .btn svg {
+            width: 26px;
+            height: 26px;
+            fill: #5a6268;
+        }
+
+        #playBtn svg {
+            transform: translateX(2px);
+        }
+
+        /* Container do Toca-Discos */
+        .player-container {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .vinyl-static {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Vinil Virtual</h1>
+        <p>Criado por Yuri</p>
+    </header>
+
+    <div class="controls">
+        <button class="btn" id="playBtn" onclick="playAudio()">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="btn" id="pauseBtn" onclick="pauseAudio()">
+            <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="btn" id="stopBtn" onclick="stopAudio()">
+            <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+        </button>
+    </div>
+
+    <div class="player-container">
+        <img class="vinyl-static" src="Vinil - imagem.png" alt="Vinil Virtual">
+    </div>
+
+    <audio id="myAudio" preload="auto">
+        <source src="Nosso dia.mpeg" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('myAudio');
+
+        function playAudio() {
+            audio.play().catch(e => {
+                console.log("Erro ao tocar:", e);
+            });
+        }
+
+        function pauseAudio() {
+            audio.pause();
+        }
+
+        function stopAudio() {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    </script>
+</body>
+</html>
