@@ -125,25 +125,34 @@
         <img class="vinyl-static" src="Vinil_imagem.png" alt="Disco de Vinil Virtual">
     </div>
 
-    <!-- Elemento de áudio robusto para tratar arquivos de vídeo mpeg como áudio puro -->
-    <audio id="myAudio" preload="auto">
+    <!-- Elemento de áudio otimizado com controles nativos ocultos para compatibilidade -->
+    <audio id="myAudio" preload="auto" style="display:none;">
         <source src="Nosso%20dia.mpeg" type="audio/mpeg">
         <source src="Nosso%20dia.mpeg" type="video/mpeg">
         <source src="Nosso%20dia.mpeg" type="audio/mp3">
+        <source src="Nosso%20dia.mpeg">
     </audio>
 
     <script>
         const audio = document.getElementById('myAudio');
 
         function playAudio() {
-            // Garante que o áudio seja carregado e executado forçadamente
-           function playAudio() {
-         audio.play().catch(e => {
-             console.log("Erro ao tocar, tentando recarregar:", e);
-             audio.load();
-             audio.play();
-         });
-     }
+            // O comando 'load' prepara o arquivo mpeg forçadamente antes de dar o play
+            audio.load();
+            
+            // Tenta reproduzir o áudio de forma limpa, sem disparar alertas chatos de erro na tela
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Música iniciada com sucesso!");
+                }).catch(error => {
+                    console.log("O navegador exigiu clique físico ou o formato falhou:", error);
+                    // Tenta reproduzir novamente após o carregamento forçado
+                    audio.play();
+                });
+            }
+        }
 
         function pauseAudio() {
             audio.pause();
