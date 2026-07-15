@@ -81,21 +81,117 @@
             transform: translateX(2px);
         }
 
-        /* Container do Toca-Discos */
-        .player-container {
-            width: 100%;
-            max-width: 360px;
+        /* Toca-discos (Estrutura Completa) */
+        .turntable-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            background: #eae6df; /* Tom sutilmente mais escuro que o fundo */
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), inset 0 0 15px rgba(255,255,255,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 10px;
         }
 
-        .vinyl-static {
-            width: 100%;
-            height: auto;
-            border-radius: 20px;
-            object-fit: contain;
+        /* O Prato Interno */
+        .platter {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: #1e1e1e;
+            box-shadow: inset 0 0 20px #000, 0 8px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* O Disco de Vinil */
+        .vinyl {
+            width: 270px;
+            height: 270px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #333 4%, #0f0f0f 30%, #1c1c1c 40%, #0c0c0c 70%, #000 100%);
+            box-shadow: inset 0 0 12px rgba(255,255,255,0.15), 0 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s ease-out;
+        }
+
+        /* Linhas concêntricas (Ranhuras do Vinil) */
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: repeating-radial-gradient(circle, transparent, transparent 3px, rgba(255,255,255,0.025) 4px, transparent 5px);
+            pointer-events: none;
+        }
+
+        /* Selo Central (Label) */
+        .vinyl-label {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            background: #e77e4d; /* Cor retrô charmosa */
+            border: 4px solid #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 7px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+            user-select: none;
+        }
+
+        .vinyl-label span {
+            font-size: 9px;
+            margin-bottom: 2px;
+            color: #fff;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+        }
+
+        /* O furo central */
+        .vinyl-label::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #eae6df;
+            border: 2px solid #111;
+            margin-top: 4px;
+        }
+
+        /* Classe que ativa a animação de rotação */
+        .vinyl-spinning {
+            animation: spin 2.8s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Braço e agulha (SVG Estática por cima) */
+        .tonearm {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            width: 110px;
+            height: 220px;
+            z-index: 10;
+            pointer-events: none;
+            filter: drop-shadow(-4px 8px 5px rgba(0,0,0,0.15));
         }
     </style>
 </head>
@@ -107,47 +203,69 @@
     </header>
 
     <div class="controls">
-        <!-- Play -->
         <button class="btn" id="playBtn" onclick="playAudio()">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </button>
-        <!-- Pause -->
         <button class="btn" id="pauseBtn" onclick="pauseAudio()">
             <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <!-- Stop -->
         <button class="btn" id="stopBtn" onclick="stopAudio()">
             <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
         </button>
     </div>
 
-    <div class="player-container">
-        <img class="vinyl-static" src="Vinil_imagem.png" alt="Disco de Vinil Virtual">
+    <div class="turntable-container">
+        <div class="platter">
+            <div class="vinyl" id="vinylDisc">
+                <div class="vinyl-label">
+                    <span>NOSSO DIA</span>
+                    YURI
+                </div>
+            </div>
+        </div>
+
+        <svg class="tonearm" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="40" r="18" fill="#cccccc" stroke="#999999" stroke-width="2"/>
+            <circle cx="80" cy="40" r="8" fill="#444444"/>
+            <path d="M 80 40 Q 60 115 52 145 Q 49 155 41 160" stroke="#dcdcdc" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M 80 40 Q 60 115 52 145 Q 49 155 41 160" stroke="#999999" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <rect x="29" y="157" width="12" height="24" rx="2" transform="rotate(25 35 169)" fill="#333333" stroke="#666666" stroke-width="1"/>
+            <rect x="37" y="163" width="4" height="12" transform="rotate(25 35 169)" fill="#e77e4d"/>
+        </svg>
     </div>
 
-    <!-- Elemento de áudio MP3 ultra compatível -->
     <audio id="myAudio" preload="auto" style="display:none;">
         <source src="Nosso_dia.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const audio = document.getElementById('myAudio');
+        const vinyl = document.getElementById('vinylDisc');
 
         function playAudio() {
-            audio.play().catch(error => {
-                console.log("Erro ao tocar:", error);
+            audio.play().then(() => {
+                console.log("Música iniciada!");
+                // Adiciona a classe de giro contínuo
+                vinyl.classList.add('vinyl-spinning');
+            }).catch(error => {
+                console.log("Erro ao reproduzir. Recarregando áudio...", error);
                 audio.load();
                 audio.play();
+                vinyl.classList.add('vinyl-spinning');
             });
         }
 
         function pauseAudio() {
             audio.pause();
+            // Para o vinil imediatamente no ângulo em que ele estiver
+            vinyl.classList.remove('vinyl-spinning');
         }
 
         function stopAudio() {
             audio.pause();
             audio.currentTime = 0;
+            // Para o vinil e o reseta de volta à rotação original (0 graus)
+            vinyl.classList.remove('vinyl-spinning');
         }
     </script>
 </body>
