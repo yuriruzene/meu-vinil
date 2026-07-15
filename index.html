@@ -107,12 +107,15 @@
     </header>
 
     <div class="controls">
+        <!-- Play -->
         <button class="btn" id="playBtn" onclick="playAudio()">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </button>
+        <!-- Pause -->
         <button class="btn" id="pauseBtn" onclick="pauseAudio()">
             <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
+        <!-- Stop -->
         <button class="btn" id="stopBtn" onclick="stopAudio()">
             <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
         </button>
@@ -122,15 +125,23 @@
         <img class="vinyl-static" src="Vinil - imagem.png" alt="Vinil Virtual">
     </div>
 
+    <!-- Elemento de áudio robusto para tratar arquivos de vídeo mpeg como áudio puro -->
     <audio id="myAudio" preload="auto">
         <source src="Nosso dia.mpeg" type="audio/mpeg">
+        <source src="Nosso dia.mpeg" type="video/mpeg">
+        <source src="Nosso dia.mpeg" type="audio/mp3">
     </audio>
 
     <script>
         const audio = document.getElementById('myAudio');
 
         function playAudio() {
-            audio.play().catch(e => {
+            // Garante que o áudio seja carregado e executado forçadamente
+            audio.load();
+            audio.play().then(() => {
+                console.log("Música tocando perfeitamente!");
+            }).catch(e => {
+                alert("Clique novamente no botão de Play. O navegador bloqueou a reprodução automática.");
                 console.log("Erro ao tocar:", e);
             });
         }
