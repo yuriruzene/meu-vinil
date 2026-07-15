@@ -127,9 +127,9 @@
 
     <!-- Elemento de áudio robusto para tratar arquivos de vídeo mpeg como áudio puro -->
     <audio id="myAudio" preload="auto">
-        <source src="Nosso dia.mpeg" type="audio/mpeg">
-        <source src="Nosso dia.mpeg" type="video/mpeg">
-        <source src="Nosso dia.mpeg" type="audio/mp3">
+        <source src="Nosso%20dia.mpeg" type="audio/mpeg">
+        <source src="Nosso%20dia.mpeg" type="video/mpeg">
+        <source src="Nosso%20dia.mpeg" type="audio/mp3">
     </audio>
 
     <script>
@@ -137,14 +137,13 @@
 
         function playAudio() {
             // Garante que o áudio seja carregado e executado forçadamente
-            audio.load();
-            audio.play().then(() => {
-                console.log("Música tocando perfeitamente!");
-            }).catch(e => {
-                alert("Clique novamente no botão de Play. O navegador bloqueou a reprodução automática.");
-                console.log("Erro ao tocar:", e);
-            });
-        }
+           function playAudio() {
+         audio.play().catch(e => {
+             console.log("Erro ao tocar, tentando recarregar:", e);
+             audio.load();
+             audio.play();
+         });
+     }
 
         function pauseAudio() {
             audio.pause();
