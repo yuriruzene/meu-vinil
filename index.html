@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player de Vinil Instantâneo</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container do Vinil */
+        .vinyl-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            cursor: pointer;
+        }
+
+        /* Imagem do Vinil */
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            /* Transição suave ao pausar a rotação */
+            transition: transform 0.5s ease; 
+        }
+
+        /* Classe que ativa a rotação contínua */
+        .rotating {
+            animation: rotateVinyl 4s linear infinite;
+        }
+
+        @keyframes rotateVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Botão de Controle */
+        .controls {
+            margin-top: 30px;
+        }
+
+        .play-btn {
+            background-color: #1db954;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .play-btn:hover {
+            background-color: #1ed760;
+            transform: scale(1.05);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. O Vinil Interativo -->
+    <div class="vinyl-container" onclick="togglePlay()">
+        <!-- Substitua 'vinil.png' pelo caminho ou imagem cortada do seu vinil -->
+        <img id="vinylImage" class="vinyl" src="vinil.png" alt="Vinil">
+    </div>
+
+    <!-- 2. Botão de Controle -->
+    <div class="controls">
+        <button id="playBtn" class="play-btn" onclick="togglePlay()">PLAY</button>
+    </div>
+
+    <!-- 3. Elemento de Áudio com Pré-carregamento Ativo -->
+    <!-- O segredo está no preload="auto" que baixa o áudio em segundo plano -->
+    <audio id="meuAudio" src="sua-musica.mp3" preload="auto"></audio>
+
+    <script>
+        const audio = document.getElementById('meuAudio');
+        const vinyl = document.getElementById('vinylImage');
+        const playBtn = document.getElementById('playBtn');
+
+        function togglePlay() {
+            if (audio.paused) {
+                // Toca o áudio instantaneamente (já carregado na memória)
+                audio.play()
+                    .then(() => {
+                        vinyl.classList.add('rotating');
+                        playBtn.innerText = 'PAUSE';
+                        playBtn.style.backgroundColor = '#e91429'; // Vermelho ao pausar
+                    })
+                    .catch(error => {
+                        console.error("Erro ao reproduzir o áudio:", error);
+                    });
+            } else {
+                // Pausa o áudio e a animação
+                audio.pause();
+                vinyl.classList.remove('rotating');
+                playBtn.innerText = 'PLAY';
+                playBtn.style.backgroundColor = '#1db954'; // Verde ao dar play
+            }
+        }
+
+        // Garante que se a música acabar sozinha, o vinil pare de rodar e o botão resete
+        audio.addEventListener('ended', () => {
+            vinyl.classList.remove('rotating');
+            playBtn.innerText = 'PLAY';
+            playBtn.style.backgroundColor = '#1db954';
+        });
+    </script>
+</body>
+</html>
